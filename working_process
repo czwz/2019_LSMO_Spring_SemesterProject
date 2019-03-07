@@ -1,0 +1,55 @@
+# Meeting 4 March 2019
+
+## Install:
+* LAMMPS
+```
+git clone -b stable https://github.com/lammps/lammps.git
+mv lammps lammps_git-stable
+
+cd src
+
+make yes-CLASS2
+make yes-RIGID
+make yes-KSPACE
+make yes-MOLECULE
+make yes-MANYBODY
+make yes-MISC
+make yes-USER-MISC
+
+make package-status # to check
+
+make serial  # add mode=shlib for python
+
+```
+* LAMMPS Interface
+
+https://github.com/peteboyd/lammps_interface
+
+## Make topology of IRMOF-1
+
+put IRMOF-1.cif in the lammps_interface directory 
+python lammps_interface.py --fix-metal --temp 300 --xyz 100 --nvt IRMOF-1.cif
+
+### make net momentum zero to avoid shifting of the crystal
+fix             4 all momentum 1 linear 1 1 1 rescale angular
+
+## Run/visualize a NVT calculation for empty IRMOF-1
+
+vmd IRMOF-1_mov.xyz
+
+topo readvarxyz IRMOF-1_mov.xyz #inside vmd, to load an xyz file with changing number of atoms
+
+
+
+## Deposit Xe molecules
+
+create Xe.molecule
+modify .data
+modify .in: dump and deposit
+
+## Compute diffusion
+https://lammps.sandia.gov/doc/Howto_diffusion.html
+
+## Using AiiDA?
+https://github.com/abelcarreras/aiida-lammps
+
